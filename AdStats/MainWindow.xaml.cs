@@ -17,6 +17,7 @@ namespace AdStats
         private readonly ObservableCollection<Campaign> _campaigns = new ObservableCollection<Campaign>();
         private readonly List<Campaign> _filtered = new List<Campaign>();
         private readonly string _databasePath;
+        private bool _uiReady;
 
         public MainWindow()
         {
@@ -25,6 +26,7 @@ namespace AdStats
             _databasePath = Path.Combine(FindProjectRoot(), DatabaseFileName);
             TextDbPath.Text = $"База: {_databasePath}";
 
+            _uiReady = true;
             LoadFromFile();
             RebindGrid();
             RefreshKpis();
@@ -183,6 +185,11 @@ namespace AdStats
 
         private void FilterChanged(object sender, EventArgs e)
         {
+            if (!_uiReady)
+            {
+                return;
+            }
+
             ApplyFilters();
             RefreshKpis();
         }
@@ -225,8 +232,9 @@ namespace AdStats
         {
             var channel = GetSelectedComboText(FilterChannel);
             var status = GetSelectedComboText(FilterStatus);
+            var hasSearchText = !string.IsNullOrWhiteSpace(InputSearch?.Text);
 
-            return !string.IsNullOrWhiteSpace(InputSearch.Text)
+            return hasSearchText
                    || !string.Equals(channel, "Все", StringComparison.OrdinalIgnoreCase)
                    || !string.Equals(status, "Все", StringComparison.OrdinalIgnoreCase);
         }
@@ -241,13 +249,16 @@ namespace AdStats
             var totalLeads = source.Sum(c => c.Conversions);
             var activeCount = source.Count(c => c.Status == "Active");
 
-            KpiTotalBudget.Text = $"{totalBudget:N0} ₽";
-            KpiAvgRoi.Text = $"{avgRoi:F2}%";
-            KpiAvgCtr.Text = $"{avgCtr:F2}%";
-            KpiTotalConversions.Text = totalLeads.ToString(CultureInfo.InvariantCulture);
-            KpiActiveCampaigns.Text = activeCount.ToString(CultureInfo.InvariantCulture);
+            if (KpiTotalBudget != null) KpiTotalBudget.Text = $"{totalBudget:N0} ₽";
+            if (KpiAvgRoi != null) KpiAvgRoi.Text = $"{avgRoi:F2}%";
+            if (KpiAvgCtr != null) KpiAvgCtr.Text = $"{avgCtr:F2}%";
+            if (KpiTotalConversions != null) KpiTotalConversions.Text = totalLeads.ToString(CultureInfo.InvariantCulture);
+            if (KpiActiveCampaigns != null) KpiActiveCampaigns.Text = activeCount.ToString(CultureInfo.InvariantCulture);
 
-            TextLastSync.Text = $"Обновлено: {DateTime.Now:dd.MM.yyyy HH:mm:ss}";
+            if (TextLastSync != null)
+            {
+                TextLastSync.Text = $"Обновлено: {DateTime.Now:dd.MM.yyyy HH:mm:ss}";
+            }
         }
 
         private bool TryReadForm(out Campaign campaign)
