@@ -1,1 +1,2 @@
 ﻿# name|channel|status|budget|impressions|clicks|conversions|revenue
+ааа|Google Ads|Draft|100000|100000|10000|1000|50000
