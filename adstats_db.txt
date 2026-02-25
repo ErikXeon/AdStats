@@ -1,2 +1,3 @@
 ﻿# name|channel|status|budget|impressions|clicks|conversions|revenue
-ааа|Google Ads|Draft|100000|100000|10000|1000|50000
+1|VK Ads|Active|1|1|1|1|1
+312|VK Ads|Active|1|1|1|1|1

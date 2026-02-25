@@ -58,37 +58,44 @@
             <Setter Property="Background" Value="#1C2547"/>
             <Setter Property="Foreground" Value="#F3F4F6"/>
             <Setter Property="BorderBrush" Value="#2F3C67"/>
+            <Setter Property="BorderThickness" Value="1"/>  
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Margin" Value="0,6,0,8"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <Border x:Name="ComboBorder"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="4">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="32"/>
-                                    </Grid.ColumnDefinitions>
-                                    <ContentPresenter Margin="{TemplateBinding Padding}"
-                                                      VerticalAlignment="Center"
-                                                      HorizontalAlignment="Left"
-                                                      Content="{TemplateBinding SelectionBoxItem}"
-                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
-                                    <TextBlock Grid.Column="1"
-                                               Text="▼"
-                                               Foreground="#94A3B8"
-                                               FontSize="10"
-                                               VerticalAlignment="Center"
-                                               HorizontalAlignment="Center"/>
-                                </Grid>
-                            </Border>
+                            <ToggleButton x:Name="ToggleButton"
+                                          Focusable="False"
+                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Background="{TemplateBinding Background}"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}">
+                                <Border x:Name="ComboBorder"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="4">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="32"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                          VerticalAlignment="Center"
+                                                          HorizontalAlignment="Left"
+                                                          Content="{TemplateBinding SelectionBoxItem}"
+                                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
+                                        <TextBlock Grid.Column="1"
+                                                   Text="▼"
+                                                   Foreground="#94A3B8"
+                                                   FontSize="10"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </ToggleButton>
                             <Popup x:Name="PART_Popup"
                                    Placement="Bottom"
                                    IsOpen="{TemplateBinding IsDropDownOpen}"
@@ -274,6 +281,10 @@
                                 <Button Content="Обновить" Style="{StaticResource SecondaryButtonStyle}" Click="UpdateCampaign_Click"/>
                                 <Button Content="Удалить" Style="{StaticResource DangerButtonStyle}" Click="DeleteCampaign_Click"/>
                             </WrapPanel>
+                            <WrapPanel>
+                                <Button Content="Сохранить" Style="{StaticResource SecondaryButtonStyle}" Click="SaveToFile_Click"/>
+                                <Button Content="Сбросить форму" Style="{StaticResource SecondaryButtonStyle}" Click="ClearForm_Click"/>
+                            </WrapPanel>
                         </StackPanel>
                     </Border>
 
@@ -317,11 +328,6 @@
                                 <ComboBoxItem Content="Paused"/>
                                 <ComboBoxItem Content="Completed"/>
                             </ComboBox>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                            <Button Content="Сохранить" Style="{StaticResource SecondaryButtonStyle}" Click="SaveToFile_Click"/>
-                            <Button Content="Сбросить форму" Style="{StaticResource SecondaryButtonStyle}" Click="ClearForm_Click"/>
                         </StackPanel>
                     </DockPanel>
                 </Border>
