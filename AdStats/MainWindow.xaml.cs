@@ -59,7 +59,7 @@ namespace AdStats
 
             if (_campaigns.Any(c => c.Name.Equals(candidate.Name, StringComparison.OrdinalIgnoreCase)))
             {
-                TextStatus.Text = "Кампания с таким названием уже существует.";
+                TextStatus.Text = "Запуск с таким названием уже существует.";
                 return;
             }
 
@@ -69,14 +69,14 @@ namespace AdStats
             SaveToFile();
             ClearForm();
 
-            TextStatus.Text = $"Кампания '{candidate.Name}' успешно добавлена.";
+            TextStatus.Text = $"Рекламный запуск '{candidate.Name}' успешно добавлена.";
         }
 
         private void UpdateCampaign_Click(object sender, RoutedEventArgs e)
         {
             if (!(CampaignGrid.SelectedItem is Campaign selected))
             {
-                TextStatus.Text = "Выберите кампанию в таблице для обновления.";
+                TextStatus.Text = "Выберите запуск в таблице для обновления.";
                 return;
             }
 
@@ -100,14 +100,14 @@ namespace AdStats
             RefreshKpis();
             SaveToFile();
 
-            TextStatus.Text = $"Кампания '{selected.Name}' обновлена.";
+            TextStatus.Text = $"рекламный запуск '{selected.Name}' обновлен.";
         }
 
         private void DeleteCampaign_Click(object sender, RoutedEventArgs e)
         {
             if (!(CampaignGrid.SelectedItem is Campaign selected))
             {
-                TextStatus.Text = "Выберите кампанию, которую нужно удалить.";
+                TextStatus.Text = "Выберите запуск, который нужно удалить.";
                 return;
             }
 
@@ -117,7 +117,7 @@ namespace AdStats
             SaveToFile();
             ClearForm();
 
-            TextStatus.Text = "Кампания удалена.";
+            TextStatus.Text = "Рекламный запуск удален.";
         }
 
         private void SaveToFile_Click(object sender, RoutedEventArgs e)
@@ -136,13 +136,13 @@ namespace AdStats
         {
             if (_campaigns.Count == 0)
             {
-                TextForecast.Text = "Добавьте хотя бы одну кампанию, чтобы построить прогноз.";
+                TextForecast.Text = "Добавьте хотя бы один запуск, чтобы показать прогноз.";
                 return;
             }
 
             if (!TryParseDouble(InputBudgetGrowth.Text, out var growthPercent) || growthPercent < -100)
             {
-                TextStatus.Text = "Введите корректный процент роста бюджета (не меньше -100).";
+                TextStatus.Text = "Введите корректный процент изменения бюджета (не меньше -100).";
                 return;
             }
 
@@ -156,12 +156,13 @@ namespace AdStats
             var projectedRoi = projectedBudget > 0 ? (projectedRevenue - projectedBudget) / projectedBudget * 100 : 0;
 
             TextForecast.Text =
-                $"Прогноз при изменении бюджета на {growthPercent:F1}%:\n" +
+                $"Если изменить бюджет на {growthPercent:F1}%:\n" +
                 $"• Новый бюджет: {projectedBudget:N0} ₽\n" +
-                $"• Прогноз выручки: {projectedRevenue:N0} ₽\n" +
-                $"• ROI: {currentRoi:F2}% → {projectedRoi:F2}%";
+                $"• Ожидаемая выручка: {projectedRevenue:N0} ₽\n" +
+                $"• Окупаемость рекламы: {currentRoi:F2}% → {projectedRoi:F2}%\n" +
+                $"• Рублей выручки на 1 ₽ затрат: {(1 + projectedRoi / 100):F2}";
 
-            TextStatus.Text = "Прогноз рассчитан.";
+            TextStatus.Text = "Прогноз готов.";
         }
 
         private void CampaignGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -180,7 +181,7 @@ namespace AdStats
             InputConversions.Text = selected.Conversions.ToString(CultureInfo.InvariantCulture);
             InputRevenue.Text = selected.Revenue.ToString(CultureInfo.InvariantCulture);
 
-            TextStatus.Text = $"Выбрана кампания: {selected.Name}";
+            TextStatus.Text = $"Выбран запуск: {selected.Name}";
         }
 
         private void FilterChanged(object sender, EventArgs e)
@@ -247,7 +248,7 @@ namespace AdStats
             var avgRoi = source.Count > 0 ? source.Average(c => c.RoiPercent) : 0;
             var avgCtr = source.Count > 0 ? source.Average(c => c.CtrPercent) : 0;
             var totalLeads = source.Sum(c => c.Conversions);
-            var activeCount = source.Count(c => c.Status == "Active");
+            var activeCount = source.Count(c => c.Status == "Запущена");
 
             if (KpiTotalBudget != null) KpiTotalBudget.Text = $"{totalBudget:N0} ₽";
             if (KpiAvgRoi != null) KpiAvgRoi.Text = $"{avgRoi:F2}%";
@@ -271,7 +272,7 @@ namespace AdStats
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                TextStatus.Text = "Название кампании обязательно.";
+                TextStatus.Text = "Название запуска обязательно.";
                 return false;
             }
 
@@ -283,7 +284,7 @@ namespace AdStats
 
             if (string.IsNullOrWhiteSpace(status))
             {
-                TextStatus.Text = "Выберите статус кампании.";
+                TextStatus.Text = "Выберите текущий статус запуска.";
                 return false;
             }
 
@@ -295,7 +296,7 @@ namespace AdStats
 
             if (!TryParseInt(InputImpressions.Text, out var impressions) || impressions < 0)
             {
-                TextStatus.Text = "Показы должны быть целым числом не меньше 0.";
+                TextStatus.Text = "Заявки должны быть целым числом не меньше 0.";
                 return false;
             }
 
@@ -307,7 +308,7 @@ namespace AdStats
 
             if (!TryParseInt(InputConversions.Text, out var conversions) || conversions < 0)
             {
-                TextStatus.Text = "Конверсии должны быть целым числом не меньше 0.";
+                TextStatus.Text = "Заявок не может быть больше, чем кликов.";
                 return false;
             }
 
@@ -424,8 +425,8 @@ namespace AdStats
             public Campaign(string name, string channel, string status, double budget, int impressions, int clicks, int conversions, double revenue)
             {
                 Name = name;
-                Channel = channel;
-                Status = status;
+                Channel = NormalizeChannel(channel);
+                Status = NormalizeStatus(status);
                 Budget = budget;
                 Impressions = impressions;
                 Clicks = clicks;
@@ -499,6 +500,31 @@ namespace AdStats
 
                 campaign = new Campaign(Unescape(parts[0]), Unescape(parts[1]), Unescape(parts[2]), budget, impressions, clicks, conversions, revenue);
                 return true;
+            }
+
+            private static string NormalizeChannel(string channel)
+            {
+                switch ((channel ?? string.Empty).Trim())
+                {
+                    case "Google Ads": return "Поиск Google";
+                    case "VK Ads": return "Реклама ВКонтакте";
+                    case "Yandex Direct": return "Яндекс Реклама";
+                    case "Telegram Ads": return "Реклама в Telegram";
+                    case "Meta Ads": return "Реклама Meta";
+                    default: return (channel ?? string.Empty).Trim();
+                }
+            }
+
+            private static string NormalizeStatus(string status)
+            {
+                switch ((status ?? string.Empty).Trim())
+                {
+                    case "Draft": return "Черновик";
+                    case "Active": return "Запущена";
+                    case "Paused": return "На паузе";
+                    case "Completed": return "Завершена";
+                    default: return (status ?? string.Empty).Trim();
+                }
             }
 
             private static string Escape(string value)

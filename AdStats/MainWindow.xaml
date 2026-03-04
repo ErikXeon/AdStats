@@ -1,5 +1,5 @@
 ﻿<Window x:Class="AdStats.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,12 +14,17 @@
         Foreground="#E5E7EB">
     <Window.Resources>
         <SolidColorBrush x:Key="CardBrush" Color="#121A33"/>
-        <SolidColorBrush x:Key="AccentBrush" Color="#5EEAD4"/>
+        <SolidColorBrush x:Key="CardSoftBrush" Color="#1A2346"/>
         <Style x:Key="CardBorderStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="14"/>
             <Setter Property="Background" Value="{StaticResource CardBrush}"/>
             <Setter Property="Padding" Value="16"/>
-            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+        </Style>
+        <Style x:Key="InputLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="Margin" Value="0,10,0,4"/>
+            <Setter Property="FontSize" Value="12"/>
         </Style>
         <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
             <Setter Property="Background" Value="#1C2547"/>
@@ -27,130 +32,44 @@
             <Setter Property="BorderBrush" Value="#2F3C67"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8"/>
-            <Setter Property="Margin" Value="0,6,0,8"/>
+        </Style>
+        <Style x:Key="InputLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="Margin" Value="0,10,0,4"/>
+            <Setter Property="FontSize" Value="12"/>
         </Style>
         <Style x:Key="ComboBoxItemStyle" TargetType="ComboBoxItem">
             <Setter Property="Background" Value="#1C2547"/>
             <Setter Property="Foreground" Value="#F3F4F6"/>
             <Setter Property="Padding" Value="8,6"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBoxItem">
-                        <Border x:Name="ItemBorder" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#2563EB"/>
-                                <Setter Property="Foreground" Value="#F8FAFC"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#334155"/>
-                                <Setter Property="Foreground" Value="#F8FAFC"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
         <Style x:Key="InputComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Background" Value="#1C2547"/>
             <Setter Property="Foreground" Value="#F3F4F6"/>
             <Setter Property="BorderBrush" Value="#2F3C67"/>
-            <Setter Property="BorderThickness" Value="1"/>  
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8"/>
-            <Setter Property="Margin" Value="0,6,0,8"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemStyle}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton x:Name="ToggleButton"
-                                          Focusable="False"
-                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          Background="{TemplateBinding Background}"
-                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                          BorderThickness="{TemplateBinding BorderThickness}">
-                                <Border x:Name="ComboBorder"
-                                        Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        CornerRadius="4">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="32"/>
-                                        </Grid.ColumnDefinitions>
-                                        <ContentPresenter Margin="{TemplateBinding Padding}"
-                                                          VerticalAlignment="Center"
-                                                          HorizontalAlignment="Left"
-                                                          Content="{TemplateBinding SelectionBoxItem}"
-                                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"/>
-                                        <TextBlock Grid.Column="1"
-                                                   Text="▼"
-                                                   Foreground="#94A3B8"
-                                                   FontSize="10"
-                                                   VerticalAlignment="Center"
-                                                   HorizontalAlignment="Center"/>
-                                    </Grid>
-                                </Border>
-                            </ToggleButton>
-                            <Popup x:Name="PART_Popup"
-                                   Placement="Bottom"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}"
-                                   AllowsTransparency="True"
-                                   Focusable="False"
-                                   PopupAnimation="Fade">
-                                <Border Background="#111827"
-                                        BorderBrush="#2F3C67"
-                                        BorderThickness="1"
-                                        CornerRadius="4"
-                                        MinWidth="{TemplateBinding ActualWidth}">
-                                    <ScrollViewer>
-                                        <ItemsPresenter/>
-                                    </ScrollViewer>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#3B82F6"/>
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                                <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#3B82F6"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="ComboBorder" Property="Opacity" Value="0.55"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
         </Style>
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="0,6,8,6"/>
-            <Setter Property="Padding" Value="16,9"/>
-            <Setter Property="Background" Value="#14B8A6"/>
-            <Setter Property="Foreground" Value="#042F2E"/>
-            <Setter Property="BorderBrush" Value="#14B8A6"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
         <Style x:Key="SecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
             <Setter Property="Background" Value="#334155"/>
-            <Setter Property="BorderBrush" Value="#334155"/>
-            <Setter Property="Foreground" Value="#E2E8F0"/>
         </Style>
         <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-            <Setter Property="Background" Value="#DC2626"/>
-            <Setter Property="BorderBrush" Value="#DC2626"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#B91C1C"/>
         </Style>
         <Style x:Key="KpiValueStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="28"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#5EEAD4"/>
+            <Setter Property="Margin" Value="0,6,0,0"/>
         </Style>
         <Style x:Key="DataGridStyle" TargetType="DataGrid">
             <Setter Property="Background" Value="#121A33"/>
@@ -176,62 +95,54 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Margin="0,0,0,16">
-            <StackPanel DockPanel.Dock="Left">
-                <TextBlock Text="ПДАРК" FontSize="34" FontWeight="Bold" Foreground="#E2E8F0"/>
-                <TextBlock Text="Панель анализа эффективности рекламных кампаний" Foreground="#93C5FD" FontSize="14"/>
-            </StackPanel>
-            <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock x:Name="TextLastSync" Foreground="#CBD5E1" HorizontalAlignment="Right"/>
-                <TextBlock x:Name="TextDbPath" Foreground="#64748B" FontSize="12" HorizontalAlignment="Right"/>
-            </StackPanel>
-        </DockPanel>
+        <Border Grid.Row="0" Style="{StaticResource CardBorderStyle}" Margin="0,0,0,14" Padding="16,14">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="ПДАРК" FontSize="30" FontWeight="Bold" Foreground="#E2E8F0"/>
+                    <TextBlock Text="Простая панель учёта и анализа рекламных кампаний" Foreground="#93C5FD" FontSize="14"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock x:Name="TextLastSync" Foreground="#CBD5E1" HorizontalAlignment="Right"/>
+                    <TextBlock x:Name="TextDbPath" Foreground="#64748B" FontSize="12" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
 
-        <Grid Grid.Row="1" Margin="0,0,0,16">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Border Style="{StaticResource CardBorderStyle}" Grid.Column="0" Margin="0,0,10,0">
+        <UniformGrid Grid.Row="1" Columns="5" Margin="0,0,0,14">
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
                 <StackPanel>
                     <TextBlock Text="Общий бюджет" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiTotalBudget" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource CardBorderStyle}" Grid.Column="1" Margin="0,0,10,0">
-                <StackPanel>
-                    <TextBlock Text="Средний ROI" Foreground="#94A3B8"/>
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">                <StackPanel>
+                    <TextBlock Text="Окупаемость рекламы" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiAvgRoi" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource CardBorderStyle}" Grid.Column="2" Margin="0,0,10,0">
-                <StackPanel>
-                    <TextBlock Text="Средний CTR" Foreground="#94A3B8"/>
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">                <StackPanel>
+                    <TextBlock Text="Кликов на 100 показов" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiAvgCtr" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource CardBorderStyle}" Grid.Column="3" Margin="0,0,10,0">
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
                 <StackPanel>
-                    <TextBlock Text="Всего лидов" Foreground="#94A3B8"/>
+                    <TextBlock Text="Всего заявок" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiTotalConversions" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
-            <Border Style="{StaticResource CardBorderStyle}" Grid.Column="4">
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0">
                 <StackPanel>
-                    <TextBlock Text="Активных кампаний" Foreground="#94A3B8"/>
+                    <TextBlock Text="Активные рекламы" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiActiveCampaigns" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
-        </Grid>
-
+        </UniformGrid>
+        
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="360"/>
-                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="390"/>
+                <ColumnDefinition Width="14"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -239,12 +150,12 @@
                 <StackPanel>
                     <Border Style="{StaticResource CardBorderStyle}">
                         <StackPanel>
-                            <TextBlock Text="Карточка кампании" FontSize="18" FontWeight="SemiBold"/>
-
+                            <TextBlock Text="Шаг 1. Заполните данные кампании" FontSize="18" FontWeight="SemiBold"/>
+                            
                             <TextBlock Text="Название" Margin="0,14,0,0"/>
-                            <TextBox x:Name="InputName" Style="{StaticResource InputTextBoxStyle}"/>
+                            <TextBlock Text="Название кампании" Style="{StaticResource InputLabelStyle}"/>
 
-                            <TextBlock Text="Канал"/>
+                            <TextBlock Text="Канал продвижения" Style="{StaticResource InputLabelStyle}"/>
                             <ComboBox x:Name="InputChannel" Style="{StaticResource InputComboBoxStyle}">
                                 <ComboBoxItem Content="Google Ads"/>
                                 <ComboBoxItem Content="VK Ads"/>
@@ -253,30 +164,54 @@
                                 <ComboBoxItem Content="Meta Ads"/>
                             </ComboBox>
 
-                            <TextBlock Text="Статус"/>
+                            <TextBlock Text="Статус" Style="{StaticResource InputLabelStyle}"/>
                             <ComboBox x:Name="InputStatus" Style="{StaticResource InputComboBoxStyle}">
-                                <ComboBoxItem Content="Draft"/>
-                                <ComboBoxItem Content="Active"/>
-                                <ComboBoxItem Content="Paused"/>
-                                <ComboBoxItem Content="Completed"/>
+                                <ComboBoxItem Content="Черновик"/>
+                                <ComboBoxItem Content="Запущена"/>
+                                <ComboBoxItem Content="На паузе"/>
+                                <ComboBoxItem Content="Завершена"/>
                             </ComboBox>
 
-                            <TextBlock Text="Бюджет (₽)"/>
-                            <TextBox x:Name="InputBudget" Style="{StaticResource InputTextBoxStyle}"/>
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Бюджет (₽)" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
+                                    <TextBox x:Name="InputBudget" Style="{StaticResource InputTextBoxStyle}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Доход (₽)" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
+                                    <TextBox x:Name="InputRevenue" Style="{StaticResource InputTextBoxStyle}"/>
+                                </StackPanel>
+                            </Grid>
 
-                            <TextBlock Text="Показы"/>
-                            <TextBox x:Name="InputImpressions" Style="{StaticResource InputTextBoxStyle}"/>
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Показы" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
+                                    <TextBox x:Name="InputImpressions" Style="{StaticResource InputTextBoxStyle}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Клики" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
+                                    <TextBox x:Name="InputClicks" Style="{StaticResource InputTextBoxStyle}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="Конверсии" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
+                                    <TextBox x:Name="InputConversions" Style="{StaticResource InputTextBoxStyle}"/>
+                                </StackPanel>
+                            </Grid>
 
-                            <TextBlock Text="Клики"/>
-                            <TextBox x:Name="InputClicks" Style="{StaticResource InputTextBoxStyle}"/>
-
-                            <TextBlock Text="Конверсии"/>
-                            <TextBox x:Name="InputConversions" Style="{StaticResource InputTextBoxStyle}"/>
-
-                            <TextBlock Text="Доход (₽)"/>
-                            <TextBox x:Name="InputRevenue" Style="{StaticResource InputTextBoxStyle}"/>
-
-                            <WrapPanel Margin="0,10,0,0">
+                            <TextBlock Text="Шаг 2. Выберите действие" Foreground="#94A3B8" Margin="0,12,0,8" FontSize="12"/>
+                            <WrapPanel>
                                 <Button Content="Добавить" Style="{StaticResource PrimaryButtonStyle}" Click="AddCampaign_Click"/>
                                 <Button Content="Обновить" Style="{StaticResource SecondaryButtonStyle}" Click="UpdateCampaign_Click"/>
                                 <Button Content="Удалить" Style="{StaticResource DangerButtonStyle}" Click="DeleteCampaign_Click"/>
@@ -290,11 +225,15 @@
 
                     <Border Style="{StaticResource CardBorderStyle}">
                         <StackPanel>
-                            <TextBlock Text="Прогнозатор" FontSize="18" FontWeight="SemiBold"/>
-                            <TextBlock Text="Рост бюджета (%)" Margin="0,12,0,0"/>
-                            <TextBox x:Name="InputBudgetGrowth" Style="{StaticResource InputTextBoxStyle}" Text="15"/>
-                            <Button Content="Рассчитать прогноз" Style="{StaticResource SecondaryButtonStyle}" Click="Forecast_Click"/>
-                            <TextBlock x:Name="TextForecast" Margin="0,10,0,0" TextWrapping="Wrap" Foreground="#A7F3D0"/>
+                            <TextBlock Text="Сценарий изменения бюджета" Foreground="#94A3B8" Margin="0,8,0,4"/>
+                            <DockPanel Margin="0,0,0,8">
+                                <TextBox x:Name="InputBudgetGrowth" Style="{StaticResource InputTextBoxStyle}" Text="15" Width="100"/>
+                                <TextBlock Text="%" VerticalAlignment="Center" Margin="8,0,0,0" Foreground="#CBD5E1"/>
+                            </DockPanel>
+                            <Button Content="Рассчитать прогноз" Style="{StaticResource SecondaryButtonStyle}" Click="Forecast_Click" HorizontalAlignment="Left"/>
+                            <Border Background="{StaticResource CardSoftBrush}" CornerRadius="10" Padding="10" Margin="0,10,0,0">
+                                <TextBlock x:Name="TextForecast" TextWrapping="Wrap" Foreground="#A7F3D0" Text="Здесь появится прогноз по бюджету, выручке и ROI."/>
+                            </Border>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -307,12 +246,22 @@
                 </Grid.RowDefinitions>
 
                 <Border Style="{StaticResource CardBorderStyle}" Grid.Row="0">
-                    <DockPanel>
-                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
-                            <TextBlock Text="Поиск:" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBox x:Name="InputSearch" Width="220" Style="{StaticResource InputTextBoxStyle}" Margin="0" TextChanged="FilterChanged"/>
-                            <TextBlock Text="Канал:" Margin="16,0,8,0" VerticalAlignment="Center"/>
-                            <ComboBox x:Name="FilterChannel" Width="150" Style="{StaticResource InputComboBoxStyle}" Margin="0" SelectionChanged="FilterChanged">
+                    <StackPanel>
+                        <TextBlock Text="Список кампаний" FontSize="18" FontWeight="SemiBold"/>
+                        <TextBlock Text="Фильтры и поиск" Foreground="#94A3B8" Margin="0,8,0,8"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="InputSearch" Grid.Column="0" Style="{StaticResource InputTextBoxStyle}" TextChanged="FilterChanged"/>
+                            <ComboBox x:Name="FilterChannel" Grid.Column="2" Style="{StaticResource InputComboBoxStyle}" SelectionChanged="FilterChanged">
+                                
                                 <ComboBoxItem Content="Все" IsSelected="True"/>
                                 <ComboBoxItem Content="Google Ads"/>
                                 <ComboBoxItem Content="VK Ads"/>
@@ -320,20 +269,23 @@
                                 <ComboBoxItem Content="Telegram Ads"/>
                                 <ComboBoxItem Content="Meta Ads"/>
                             </ComboBox>
-                            <TextBlock Text="Статус:" Margin="16,0,8,0" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="FilterStatus" Grid.Column="4" Style="{StaticResource InputComboBoxStyle}" SelectionChanged="FilterChanged">
                             <ComboBox x:Name="FilterStatus" Width="150" Style="{StaticResource InputComboBoxStyle}" Margin="0" SelectionChanged="FilterChanged">
                                 <ComboBoxItem Content="Все" IsSelected="True"/>
-                                <ComboBoxItem Content="Draft"/>
-                                <ComboBoxItem Content="Active"/>
-                                <ComboBoxItem Content="Paused"/>
-                                <ComboBoxItem Content="Completed"/>
+                                <ComboBoxItem Content="Черновик"/>
+                                <ComboBoxItem Content="Запущена"/>
+                                <ComboBoxItem Content="На паузе"/>
+                                <ComboBoxItem Content="Завершена"/>
                             </ComboBox>
-                        </StackPanel>
-                    </DockPanel>
-                </Border>
+                        </Grid>
+                        <WrapPanel Margin="0,10,0,0">
+                            <Button Content="Сохранить" Style="{StaticResource SecondaryButtonStyle}" Click="SaveToFile_Click"/>
+                            <Button Content="Сбросить форму" Style="{StaticResource SecondaryButtonStyle}" Click="ClearForm_Click"/>
+                        </WrapPanel>
+                    </StackPanel>
 
-                <Border Style="{StaticResource CardBorderStyle}" Grid.Row="1" Margin="0,0,0,0">
-                    <DataGrid x:Name="CampaignGrid"
+                    <Border Style="{StaticResource CardBorderStyle}" Grid.Row="1" Margin="0">
+                        <DataGrid x:Name="CampaignGrid"
                               Style="{StaticResource DataGridStyle}"
                               SelectionChanged="CampaignGrid_SelectionChanged"
                               IsReadOnly="True">
@@ -342,10 +294,10 @@
                             <DataGridTextColumn Header="Канал" Binding="{Binding Channel}" Width="*"/>
                             <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="*"/>
                             <DataGridTextColumn Header="Бюджет" Binding="{Binding Budget, StringFormat={}{0:N0} ₽}" Width="*"/>
-                            <DataGridTextColumn Header="CTR" Binding="{Binding CtrPercent, StringFormat={}{0:F2}%}" Width="*"/>
-                            <DataGridTextColumn Header="CPC" Binding="{Binding Cpc, StringFormat={}{0:F2} ₽}" Width="*"/>
-                            <DataGridTextColumn Header="CPA" Binding="{Binding Cpa, StringFormat={}{0:F2} ₽}" Width="*"/>
-                            <DataGridTextColumn Header="ROI" Binding="{Binding RoiPercent, StringFormat={}{0:F2}%}" Width="*"/>
+                            <DataGridTextColumn Header="Кликов на 100 показов" Binding="{Binding CtrPercent, StringFormat={}{0:F2}%}" Width="*"/>
+                            <DataGridTextColumn Header="Цена 1 клика" Binding="{Binding Cpc, StringFormat={}{0:F2} ₽}" Width="*"/>
+                            <DataGridTextColumn Header="Цена 1 заявки" Binding="{Binding Cpa, StringFormat={}{0:F2} ₽}" Width="*"/>
+                            <DataGridTextColumn Header="Окупаемость" Binding="{Binding RoiPercent, StringFormat={}{0:F2}%}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
