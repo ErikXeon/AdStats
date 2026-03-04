@@ -1,2 +1,1 @@
 ﻿# name|channel|status|budget|impressions|clicks|conversions|revenue
-123|Поиск Google|Черновик|312|321|312|132|312
