@@ -1,3 +1,2 @@
 ﻿# name|channel|status|budget|impressions|clicks|conversions|revenue
-1|VK Ads|Active|1|1|1|1|1
-312|VK Ads|Active|1|1|1|1|1
+123|Поиск Google|Черновик|312|321|312|132|312

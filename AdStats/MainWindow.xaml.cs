@@ -69,7 +69,7 @@ namespace AdStats
             SaveToFile();
             ClearForm();
 
-            TextStatus.Text = $"Рекламный запуск '{candidate.Name}' успешно добавлена.";
+            TextStatus.Text = $"Рекламный запуск '{candidate.Name}' успешно добавлен.";
         }
 
         private void UpdateCampaign_Click(object sender, RoutedEventArgs e)
@@ -100,7 +100,7 @@ namespace AdStats
             RefreshKpis();
             SaveToFile();
 
-            TextStatus.Text = $"рекламный запуск '{selected.Name}' обновлен.";
+            TextStatus.Text = $"Рекламный запуск '{selected.Name}' обновлен.";
         }
 
         private void DeleteCampaign_Click(object sender, RoutedEventArgs e)
@@ -160,7 +160,7 @@ namespace AdStats
                 $"• Новый бюджет: {projectedBudget:N0} ₽\n" +
                 $"• Ожидаемая выручка: {projectedRevenue:N0} ₽\n" +
                 $"• ROAS: {currentRoas:F2}% → {projectedRoas:F2}%\n" +
-                $"• Revenue per 1 ₽ spend: {(projectedRoas / 100):F2}";
+                $"• Выручка на 1 ₽ расхода: {(projectedRoas / 100):F2}";
 
             TextStatus.Text = "Прогноз готов.";
         }
@@ -247,12 +247,16 @@ namespace AdStats
             var totalBudget = source.Sum(c => c.Budget);
             var avgRoi = source.Count > 0 ? source.Average(c => c.RoiPercent) : 0;
             var avgCtr = source.Count > 0 ? source.Average(c => c.CtrPercent) : 0;
+            var avgCpc = source.Count > 0 ? source.Average(c => c.Cpc) : 0;
+            var avgCpa = source.Count > 0 ? source.Average(c => c.Cpa) : 0;
             var totalLeads = source.Sum(c => c.Conversions);
             var activeCount = source.Count(c => c.Status == "Запущена");
 
             if (KpiTotalBudget != null) KpiTotalBudget.Text = $"{totalBudget:N0} ₽";
             if (KpiAvgRoi != null) KpiAvgRoi.Text = $"{avgRoi:F2}%";
             if (KpiAvgCtr != null) KpiAvgCtr.Text = $"{avgCtr:F2}%";
+            if (KpiAvgCpc != null) KpiAvgCpc.Text = $"{avgCpc:F2} ₽";
+            if (KpiAvgCpa != null) KpiAvgCpa.Text = $"{avgCpa:F2} ₽";
             if (KpiTotalConversions != null) KpiTotalConversions.Text = totalLeads.ToString(CultureInfo.InvariantCulture);
             if (KpiActiveCampaigns != null) KpiActiveCampaigns.Text = activeCount.ToString(CultureInfo.InvariantCulture);
 

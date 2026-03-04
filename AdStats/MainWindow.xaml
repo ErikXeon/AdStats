@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="ПДАРК — Анализ рекламных к   ампаний"
+        Title="ПДАРК — Анализ рекламных кампаний"
         Height="892"
         Width="1420"
         MinHeight="760"
@@ -36,13 +36,43 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8"/>
         </Style>
-        
+
+        <Style x:Key="ComboBoxItemDarkStyle" TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="#F3F4F6"/>
+            <Setter Property="Background" Value="#1C2547"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ItemBorder" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#334155"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#2563EB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="InputComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Background" Value="#1C2547"/>
             <Setter Property="Foreground" Value="#F3F4F6"/>
             <Setter Property="BorderBrush" Value="#2F3C67"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemDarkStyle}"/>
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#1C2547"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#334155"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#1C2547"/>
+            </Style.Resources>
         </Style>
         
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
@@ -79,6 +109,18 @@
             <Setter Property="BorderBrush" Value="#243156"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#1C2547"/>
+                        <Setter Property="Foreground" Value="#E2E8F0"/>
+                        <Setter Property="BorderBrush" Value="#2F3C67"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
@@ -94,7 +136,7 @@
             <DockPanel>
                 <StackPanel DockPanel.Dock="Left">
                     <TextBlock Text="ПДАРК" FontSize="30" FontWeight="Bold" Foreground="#E2E8F0"/>
-                    <TextBlock Text="Performance dashboard: CTR/CPC/CPA/ROAS" Foreground="#93C5FD" FontSize="14"/>
+                    <TextBlock Text="Панель метрик: CTR/CPC/CPA/ROAS" Foreground="#93C5FD" FontSize="14"/>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock x:Name="TextLastSync" Foreground="#CBD5E1" HorizontalAlignment="Right"/>
@@ -103,22 +145,22 @@
             </DockPanel>
         </Border>
 
-        <UniformGrid Grid.Row="1" Columns="5" Margin="0,0,0,14">
+        <UniformGrid Grid.Row="1" Columns="7" Margin="0,0,0,14">
             <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
                 <StackPanel>
-                    <TextBlock Text="Spend" Foreground="#94A3B8"/>                    
+                    <TextBlock Text="Расход" Foreground="#94A3B8"/>                    
                     <TextBlock x:Name="KpiTotalBudget" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
                 <StackPanel>
-                    <TextBlock Text="AVG ROAS" Foreground="#94A3B8"/>
+                    <TextBlock Text="ROAS" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiAvgRoi" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
                 <StackPanel>
-                    <TextBlock Text="AVG CTR" Foreground="#94A3B8"/>
+                    <TextBlock Text="CTR" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiAvgCtr" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
@@ -128,9 +170,21 @@
                     <TextBlock x:Name="KpiTotalConversions" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="CPC" Foreground="#94A3B8"/>
+                    <TextBlock x:Name="KpiAvgCpc" Style="{StaticResource KpiValueStyle}"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="CPA" Foreground="#94A3B8"/>
+                    <TextBlock x:Name="KpiAvgCpa" Style="{StaticResource KpiValueStyle}"/>
+                </StackPanel>
+            </Border>
             <Border Style="{StaticResource CardBorderStyle}" Margin="0">
                 <StackPanel>
-                    <TextBlock Text="Active" Foreground="#94A3B8"/>
+                    <TextBlock Text="Активные" Foreground="#94A3B8"/>
                     <TextBlock x:Name="KpiActiveCampaigns" Style="{StaticResource KpiValueStyle}"/>
                 </StackPanel>
             </Border>
@@ -147,12 +201,12 @@
                 <StackPanel>
                     <Border Style="{StaticResource CardBorderStyle}">
                         <StackPanel>
-                            <TextBlock Text="Campaign setup" FontSize="18" FontWeight="SemiBold"/>
+                            <TextBlock Text="Настройка кампании" FontSize="18" FontWeight="SemiBold"/>
 
                             <TextBlock Text="CID" Style="{StaticResource InputLabelStyle}"/>
                             <TextBox x:Name="InputName" Style="{StaticResource InputTextBoxStyle}"/>
 
-                            <TextBlock Text="Traffic source" Style="{StaticResource InputLabelStyle}"/>
+                            <TextBlock Text="Источник трафика" Style="{StaticResource InputLabelStyle}"/>
                             <ComboBox x:Name="InputChannel" Style="{StaticResource InputComboBoxStyle}">
                                 <ComboBoxItem Content="Поиск Google"/>
                                 <ComboBoxItem Content="Реклама ВКонтакте"/>
@@ -161,7 +215,7 @@
                                 <ComboBoxItem Content="Реклама Meta"/>
                             </ComboBox>
 
-                            <TextBlock Text="Lifecycle" Style="{StaticResource InputLabelStyle}"/>
+                            <TextBlock Text="Статус" Style="{StaticResource InputLabelStyle}"/>
                             <ComboBox x:Name="InputStatus" Style="{StaticResource InputComboBoxStyle}">
                                 <ComboBoxItem Content="Черновик"/>
                                 <ComboBoxItem Content="Запущена"/>
@@ -176,10 +230,10 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Spend (₽)" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>                                    <TextBox x:Name="InputBudget" Style="{StaticResource InputTextBoxStyle}"/>
+                                    <TextBlock Text="Расход (₽)" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>                                    <TextBox x:Name="InputBudget" Style="{StaticResource InputTextBoxStyle}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Revenue (₽)" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>                                    <TextBox x:Name="InputRevenue" Style="{StaticResource InputTextBoxStyle}"/>
+                                    <TextBlock Text="Выручка (₽)" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>                                    <TextBox x:Name="InputRevenue" Style="{StaticResource InputTextBoxStyle}"/>
                                 </StackPanel>
                             </Grid>
 
@@ -192,11 +246,11 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Imp" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
+                                    <TextBlock Text="Показы" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
                                     <TextBox x:Name="InputImpressions" Style="{StaticResource InputTextBoxStyle}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Clicks" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
+                                    <TextBlock Text="Клики" Style="{StaticResource InputLabelStyle}" Margin="0,6,0,4"/>
                                     <TextBox x:Name="InputClicks" Style="{StaticResource InputTextBoxStyle}"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="4">
@@ -205,25 +259,25 @@
                                 </StackPanel>
                             </Grid>
 
-                            <TextBlock Text="Action" Foreground="#94A3B8" Margin="0,12,0,8" FontSize="12"/>
+                            <TextBlock Text="Действия" Foreground="#94A3B8" Margin="0,12,0,8" FontSize="12"/>
                             <WrapPanel>
-                                <Button Content="Add" Style="{StaticResource PrimaryButtonStyle}" Click="AddCampaign_Click"/>
-                                <Button Content="Update" Style="{StaticResource SecondaryButtonStyle}" Click="UpdateCampaign_Click"/>
-                                <Button Content="Delete" Style="{StaticResource DangerButtonStyle}" Click="DeleteCampaign_Click"/>
+                                <Button Content="Добавить" Style="{StaticResource PrimaryButtonStyle}" Click="AddCampaign_Click"/>
+                                <Button Content="Обновить" Style="{StaticResource SecondaryButtonStyle}" Click="UpdateCampaign_Click"/>
+                                <Button Content="Удалить" Style="{StaticResource DangerButtonStyle}" Click="DeleteCampaign_Click"/>
                             </WrapPanel>
                         </StackPanel>
                     </Border>
 
                     <Border Style="{StaticResource CardBorderStyle}">
                         <StackPanel>
-                            <TextBlock Text="Budget uplift scenario" Foreground="#94A3B8" Margin="0,8,0,4"/>
+                            <TextBlock Text="Сценарий увеличения бюджета" Foreground="#94A3B8" Margin="0,8,0,4"/>
                             <DockPanel Margin="0,0,0,8">
                                 <TextBox x:Name="InputBudgetGrowth" Style="{StaticResource InputTextBoxStyle}" Text="15" Width="100"/>
                                 <TextBlock Text="%" VerticalAlignment="Center" Margin="8,0,0,0" Foreground="#CBD5E1"/>
                             </DockPanel>
-                            <Button Content="Run forecast" Style="{StaticResource SecondaryButtonStyle}" Click="Forecast_Click" HorizontalAlignment="Left"/>
+                            <Button Content="Запустить прогноз" Style="{StaticResource SecondaryButtonStyle}" Click="Forecast_Click" HorizontalAlignment="Left"/>
                             <Border Background="{StaticResource CardSoftBrush}" CornerRadius="10" Padding="10" Margin="0,10,0,0">
-                                <TextBlock x:Name="TextForecast" TextWrapping="Wrap" Foreground="#A7F3D0" Text="Forecast results (spend/revenue/ROAS)"/>                            </Border>
+                                <TextBlock x:Name="TextForecast" TextWrapping="Wrap" Foreground="#A7F3D0" Text="Результат прогноза (расход/выручка/ROAS"/>                            </Border>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -237,8 +291,8 @@
 
                 <Border Style="{StaticResource CardBorderStyle}" Grid.Row="0">
                     <StackPanel>
-                        <TextBlock Text="Campaign registry" FontSize="18" FontWeight="SemiBold"/>
-                        <TextBlock Text="Search + filters" Foreground="#94A3B8" Margin="0,8,0,8"/>
+                        <TextBlock Text="Реестр кампаний" FontSize="18" FontWeight="SemiBold"/>
+                        <TextBlock Text="Поиск и фильтры" Foreground="#94A3B8" Margin="0,8,0,8"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -267,11 +321,11 @@
                             </ComboBox>
                         </Grid>
                         <WrapPanel Margin="0,10,0,0">
-                            <Button Content="Save" Style="{StaticResource SecondaryButtonStyle}" Click="SaveToFile_Click"/>
-                            <Button Content="Clear form" Style="{StaticResource SecondaryButtonStyle}" Click="ClearForm_Click"/>
+                            <Button Content="Сохранить" Style="{StaticResource SecondaryButtonStyle}" Click="SaveToFile_Click"/>
+                            <Button Content="Очистить форму" Style="{StaticResource SecondaryButtonStyle}" Click="ClearForm_Click"/>
                         </WrapPanel>
                     </StackPanel>
-
+                </Border>
                 <Border Style="{StaticResource CardBorderStyle}" Grid.Row="1" Margin="0">
                     <DataGrid x:Name="CampaignGrid"
                               Style="{StaticResource DataGridStyle}"
@@ -279,10 +333,10 @@
                               IsReadOnly="True">
                         <DataGrid.Columns>
                                 <DataGridTextColumn Header="CID" Binding="{Binding Name}" Width="2*"/>
-                                <DataGridTextColumn Header="Source" Binding="{Binding Channel}" Width="*"/>
-                                <DataGridTextColumn Header="State" Binding="{Binding Status}" Width="*"/>
-                                <DataGridTextColumn Header="Spend" Binding="{Binding Budget, StringFormat={}{0:N0} ₽}" Width="*"/>
-                                <DataGridTextColumn Header="CTR" Binding="{Binding CtrPercent, StringFormat={}{0:F2}%}" Width="*"/>
+                            <DataGridTextColumn Header="Источник" Binding="{Binding Channel}" Width="*"/>
+                            <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="*"/>
+                            <DataGridTextColumn Header="Расход" Binding="{Binding Budget, StringFormat={}{0:N0} ₽}" Width="*"/>
+                            <DataGridTextColumn Header="CTR" Binding="{Binding CtrPercent, StringFormat={}{0:F2}%}" Width="*"/>
                                 <DataGridTextColumn Header="CPC" Binding="{Binding Cpc, StringFormat={}{0:F2} ₽}" Width="*"/>
                                 <DataGridTextColumn Header="CPA" Binding="{Binding Cpa, StringFormat={}{0:F2} ₽}" Width="*"/>
                                 <DataGridTextColumn Header="ROAS" Binding="{Binding RoasPercent, StringFormat={}{0:F2}%}" Width="*"/>
