@@ -149,18 +149,18 @@ namespace AdStats
             var growthFactor = 1 + growthPercent / 100.0;
             var totalBudget = _campaigns.Sum(c => c.Budget);
             var totalRevenue = _campaigns.Sum(c => c.Revenue);
-            var currentRoi = totalBudget > 0 ? (totalRevenue - totalBudget) / totalBudget * 100 : 0;
+            var currentRoas = totalBudget > 0 ? totalRevenue / totalBudget * 100 : 0;
 
             var projectedBudget = totalBudget * growthFactor;
             var projectedRevenue = totalRevenue * (1 + (growthPercent / 100.0 * 0.72));
-            var projectedRoi = projectedBudget > 0 ? (projectedRevenue - projectedBudget) / projectedBudget * 100 : 0;
+            var projectedRoas = projectedBudget > 0 ? projectedRevenue / projectedBudget * 100 : 0;
 
             TextForecast.Text =
                 $"Если изменить бюджет на {growthPercent:F1}%:\n" +
                 $"• Новый бюджет: {projectedBudget:N0} ₽\n" +
                 $"• Ожидаемая выручка: {projectedRevenue:N0} ₽\n" +
-                $"• Окупаемость рекламы: {currentRoi:F2}% → {projectedRoi:F2}%\n" +
-                $"• Рублей выручки на 1 ₽ затрат: {(1 + projectedRoi / 100):F2}";
+                $"• ROAS: {currentRoas:F2}% → {projectedRoas:F2}%\n" +
+                $"• Revenue per 1 ₽ spend: {(projectedRoas / 100):F2}";
 
             TextStatus.Text = "Прогноз готов.";
         }
@@ -296,7 +296,7 @@ namespace AdStats
 
             if (!TryParseInt(InputImpressions.Text, out var impressions) || impressions < 0)
             {
-                TextStatus.Text = "Заявки должны быть целым числом не меньше 0.";
+                TextStatus.Text = "Показы должны быть целым числом не меньше 0.";
                 return false;
             }
 
@@ -308,7 +308,7 @@ namespace AdStats
 
             if (!TryParseInt(InputConversions.Text, out var conversions) || conversions < 0)
             {
-                TextStatus.Text = "Заявок не может быть больше, чем кликов.";
+                TextStatus.Text = "Конверсии должны быть целым числом не меньше 0.";
                 return false;
             }
 
@@ -447,6 +447,7 @@ namespace AdStats
             public double Cpc => Clicks == 0 ? 0 : Budget / Clicks;
             public double Cpa => Conversions == 0 ? 0 : Budget / Conversions;
             public double RoiPercent => Budget == 0 ? 0 : (Revenue - Budget) / Budget * 100;
+            public double RoasPercent => Budget == 0 ? 0 : Revenue / Budget * 100;
 
             public void UpdateFrom(Campaign source)
             {
